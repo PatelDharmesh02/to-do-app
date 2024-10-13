@@ -16,17 +16,20 @@ function App() {
     setLoder(false);
     setTodoList(todos);
   };
-  
+
   const handleAddTodo = async () => {
     if (newTodoText === "") return;
     setLoder(true);
-    const data = await fetch("http://127.0.0.1:8000/add_todo", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ description: newTodoText, completed: false }),
-    });
+    const data = await fetch(
+      "https://to-do-app-backend-tawny.vercel.app/add_todo",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ description: newTodoText, completed: false }),
+      }
+    );
     debugger;
     const response = await data.json();
     debugger;

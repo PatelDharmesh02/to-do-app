@@ -5,20 +5,21 @@ import ToDoContext from "./todoContext";
 
 function App() {
   const [todoList, setTodoList] = useState([]);
-  const [loder, setLoder] = useState(true);
+  const [loader, setLoader] = useState(true);
   const [addTodo, setAddTodo] = useState(false);
   const [newTodoText, setNewTodoText] = useState("");
 
   const getTodoList = async () => {
+    setLoader(true);
     const data = await fetch(process.env.REACT_APP_GET_ROUTE);
     const todos = await data.json();
-    setLoder(false);
+    setLoader(false);
     setTodoList(todos);
   };
 
   const handleAddTodo = async () => {
     if (newTodoText === "") return;
-    setLoder(true);
+    setLoader(true);
     const data = await fetch(process.env.REACT_APP_POST_ROUTE, {
       method: "POST",
       headers: {
@@ -27,7 +28,7 @@ function App() {
       body: JSON.stringify({ description: newTodoText, completed: false }),
     });
     const response = await data.json();
-    setLoder(false);
+    setLoader(false);
     setAddTodo(false);
     setNewTodoText("");
     setTodoList([...todoList, response]);
@@ -38,9 +39,9 @@ function App() {
   }, []);
 
   return (
-    <ToDoContext.Provider value={{ todoList, setTodoList }}>
+    <ToDoContext.Provider value={{ todoList, setTodoList, loader, setLoader }}>
       <div className="App">
-        {loder ? (
+        {loader ? (
           <div>Loading...</div>
         ) : (
           <>
@@ -55,6 +56,7 @@ function App() {
                   className="todo-input"
                   type="text"
                   value={newTodoText}
+                  autoFocus={true}
                   onChange={(e) => setNewTodoText(e.target.value)}
                 />
                 <div className="action-buttons-container">
